@@ -20,7 +20,9 @@ async function callAPI(
   }
 
   const json: Suggestions = await resp.json();
-  return [json, performance.now() - perfstart];
+  const ms = Math.round(performance.now() - perfstart);
+
+  return [json, ms];
 }
 
 export default function Search() {
