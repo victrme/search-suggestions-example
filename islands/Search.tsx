@@ -20,7 +20,9 @@ async function callAPI(query: string, provider: string): Promise<Suggestions> {
 }
 
 export default function Search() {
-  const [list, setList] = useState([] as Suggestions);
+  const [list, setList] = useState(
+    [{ text: "hello" }, { text: "world" }] as Suggestions,
+  );
   const [query, setQuery] = useState("");
   const [provider, setProvider] = useState("google");
   const providers = [
@@ -35,6 +37,7 @@ export default function Search() {
   function handleInput(e: Event) {
     const val = (e.target as HTMLInputElement).value;
     setQuery(val);
+    handleList(val);
   }
 
   function handleProvider(e: Event) {
@@ -47,27 +50,14 @@ export default function Search() {
     setList(json);
   }
 
-  useEffect(() => {
-    handleList(query);
-  }, [query]);
-
   return (
     <>
-      <div class="flex flex-col-reverse gap-2 sm:flex-row">
-        <Input
-          type="text"
-          name="searchbar"
-          value={query}
-          onInput={handleInput}
-          placeholder="Search something "
-          class="w-full rounded-md focus:border-red-400 focus:outline-none"
-        />
-
+      <div class="flex flex-col gap-2 sm:flex-row-reverse">
         <select
           name="providers"
           value={provider}
           onChange={handleProvider}
-          class="bg-transparent border(gray-500 2) rounded-md px-3 py-2"
+          class="bg-transparent border(gray-500 2) rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
         >
           {providers.map((item) => (
             <option value={item}>
@@ -75,12 +65,30 @@ export default function Search() {
             </option>
           ))}
         </select>
+
+        <Input
+          onInput={handleInput}
+          value={query}
+          type="search"
+          role="combobox"
+          name="searchbar"
+          placeholder="Search something "
+          class="w-full rounded-md outline-none focus:border-red-400"
+        />
       </div>
 
       {list.length > 0 && (
-        <ul class="my-4 w-full border-2 rounded-md">
+        <ul
+          role="listbox"
+          class="my-4 p-1 w-full border-2 rounded-md"
+        >
           {list.map((item) => (
-            <li class="flex items-center gap-3 px-3 my-4 leading-4">
+            <li
+              tabIndex={0}
+              role="option"
+              aria-label="search suggestions"
+              class="flex items-center gap-3 p-2 m-1 rounded leading-4  outline-none hover:bg-blue-50 focus-visible:bg-blue-50"
+            >
               <img
                 class="object-contain"
                 src={item.image ?? "search.svg"}
