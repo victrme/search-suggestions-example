@@ -7,22 +7,25 @@ type Suggestions = {
   image?: string;
 }[];
 
-async function callAPI(query: string, provider: string): Promise<Suggestions> {
+async function callAPI(
+  query: string,
+  provider: string,
+): Promise<[Suggestions, number]> {
   const url = `https://searchsuggestions.netlify.app/${provider}/en/${query}`;
+  const perfstart = performance.now();
   const resp = await fetch(url);
 
   if (resp.status === 404) {
-    return [];
+    return [[], -1];
   }
 
   const json: Suggestions = await resp.json();
-  return json;
+  return [json, performance.now() - perfstart];
 }
 
 export default function Search() {
-  const [list, setList] = useState(
-    [{ text: "hello" }, { text: "world" }] as Suggestions,
-  );
+  const [list, setList] = useState([] as Suggestions);
+  const [latency, setLatency] = useState(-1);
   const [query, setQuery] = useState("");
   const [provider, setProvider] = useState("google");
   const providers = [
@@ -34,10 +37,9 @@ export default function Search() {
     "startpage",
   ];
 
-  function handleInput(e: Event) {
-    const val = (e.target as HTMLInputElement).value;
-    setQuery(val);
-    handleList(val);
+  function handleInput(q: string) {
+    setQuery(q);
+    handleList(q);
   }
 
   function handleProvider(e: Event) {
@@ -46,8 +48,9 @@ export default function Search() {
   }
 
   async function handleList(q: string) {
-    const json = await callAPI(q, provider);
+    const [json, ms] = await callAPI(q, provider);
     setList(json);
+    setLatency(ms);
   }
 
   return (
@@ -67,7 +70,7 @@ export default function Search() {
         </select>
 
         <Input
-          onInput={handleInput}
+          onInput={(e) => handleInput((e.target as HTMLInputElement).value)}
           value={query}
           type="search"
           role="combobox"
@@ -78,36 +81,45 @@ export default function Search() {
       </div>
 
       {list.length > 0 && (
-        <ul
-          role="listbox"
-          class="my-4 p-1 w-full border-2 rounded-md"
-        >
-          {list.map((item) => (
-            <li
-              tabIndex={0}
-              role="option"
-              aria-label="search suggestions"
-              class="flex items-center gap-3 p-2 m-1 rounded leading-4  outline-none hover:bg-blue-50 focus-visible:bg-blue-50"
-            >
-              <img
-                class="object-contain"
-                src={item.image ?? "search.svg"}
-                width="24"
-                height="24"
-                alt=""
-              />
+        <>
+          <ul
+            role="listbox"
+            class="my-4 p-1 w-full border-2 rounded-md"
+          >
+            {list.map((item) => (
+              <li
+                tabIndex={0}
+                role="option"
+                aria-label="search suggestions"
+                onClick={() => handleInput(item.text)}
+                class="flex items-center gap-3 p-2 m-1 rounded leading-4 outline-none cursor-pointer hover:bg-blue-50 focus-visible:bg-blue-50"
+              >
+                <img
+                  class="object-contain"
+                  src={item.image ?? "search.svg"}
+                  width="24"
+                  height="24"
+                  alt=""
+                />
 
-              <div>
-                <p>{item.text}</p>
-                {item.desc && (
-                  <p class="text-sm text-gray-500">
-                    <small>{item.desc}</small>
-                  </p>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+                <div>
+                  <p>{item.text}</p>
+                  {item.desc && (
+                    <p class="text-sm text-gray-500">
+                      <small>{item.desc}</small>
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          {
+            <p class="w-full text-center leading-3 text-gray-400 mb-4">
+              <small>{latency}ms</small>
+            </p>
+          }
+        </>
       )}
     </>
   );
