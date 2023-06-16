@@ -70,6 +70,7 @@ export default function Search() {
           type="search"
           role="combobox"
           name="searchbar"
+          autoComplete="off"
           aria-controls="search-results"
           placeholder="Search something"
           class="w-full rounded-md outline-none focus:border-red-400"
@@ -80,21 +81,21 @@ export default function Search() {
       {list.length > 0 && (
         <>
           <ul
+            tabIndex={0}
             role="listbox"
             id="search-results"
             aria-label="search-results"
-            class="my-4 p-1 w-full border-2 rounded-md"
+            class="my-4 p-1 w-full border-2 rounded-md outline-none"
           >
             {list.map((item) => (
               <ResultItem
                 item={item}
                 query={query}
-                tabIndex={0}
                 role="option"
                 aria-atomic="true"
                 aria-label={item.text}
                 onClick={() => handleInput(item.text)}
-                class="flex items-center gap-3 p-2 m-1 rounded leading-4 outline-none cursor-pointer hover:bg-blue-50 focus-visible:bg-blue-50"
+                class="flex items-center gap-3 p-2 m-1 rounded leading-4 outline-none cursor-pointer hover:bg-blue-50"
               />
             ))}
           </ul>
