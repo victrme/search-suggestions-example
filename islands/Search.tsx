@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import Input from "../components/Input.tsx";
 import Providers from "../components/Providers.tsx";
 import ResultItem from "../components/ResultItem.tsx";
@@ -31,7 +31,7 @@ export default function Search() {
   const [list, setList] = useState([] as Suggestions);
   const [latency, setLatency] = useState(-1);
   const [query, setQuery] = useState("");
-  const [provider, setProvider] = useState("google");
+  const [provider, setProvider] = useState("");
 
   function handleInput(q: string) {
     setQuery(q);
@@ -48,6 +48,9 @@ export default function Search() {
     setList(json);
     setLatency(ms);
   }
+
+  useEffect(() => setProvider(localStorage.provider ?? "google"), []);
+  useEffect(() => localStorage.setItem("provider", provider), [provider]);
 
   return (
     <form
