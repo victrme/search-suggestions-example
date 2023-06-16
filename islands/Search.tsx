@@ -1,5 +1,7 @@
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import Input from "../components/Input.tsx";
+import Providers from "../components/Providers.tsx";
+import ResultItem from "../components/ResultItem.tsx";
 
 type Suggestions = {
   text: string;
@@ -30,14 +32,6 @@ export default function Search() {
   const [latency, setLatency] = useState(-1);
   const [query, setQuery] = useState("");
   const [provider, setProvider] = useState("google");
-  const providers = [
-    "google",
-    "bing",
-    "yahoo",
-    "qwant",
-    "duckduckgo",
-    "startpage",
-  ];
 
   function handleInput(q: string) {
     setQuery(q);
@@ -56,29 +50,27 @@ export default function Search() {
   }
 
   return (
-    <>
+    <form
+      role="search"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <div class="flex flex-col gap-2 sm:flex-row-reverse">
-        <select
+        <Providers
           name="providers"
           value={provider}
           onChange={handleProvider}
           class="bg-transparent border(gray-500 2) rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
-        >
-          {providers.map((item) => (
-            <option value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+        />
 
         <Input
-          onInput={(e) => handleInput((e.target as HTMLInputElement).value)}
           value={query}
           type="search"
           role="combobox"
           name="searchbar"
-          placeholder="Search something "
+          aria-controls="search-results"
+          placeholder="Search something"
           class="w-full rounded-md outline-none focus:border-red-400"
+          onInput={(e) => handleInput((e.target as HTMLInputElement).value)}
         />
       </div>
 
@@ -86,40 +78,21 @@ export default function Search() {
         <>
           <ul
             role="listbox"
+            id="search-results"
+            aria-label="search-results"
             class="my-4 p-1 w-full border-2 rounded-md"
           >
-            {list.map(({ text, desc, image }) => (
-              <li
+            {list.map((item) => (
+              <ResultItem
+                item={item}
+                query={query}
                 tabIndex={0}
                 role="option"
-                aria-label="search suggestions"
-                onClick={() => handleInput(text)}
+                aria-atomic="true"
+                aria-label={item.text}
+                onClick={() => handleInput(item.text)}
                 class="flex items-center gap-3 p-2 m-1 rounded leading-4 outline-none cursor-pointer hover:bg-blue-50 focus-visible:bg-blue-50"
-              >
-                <img
-                  class="object-contain"
-                  src={image ?? "search.svg"}
-                  width="24"
-                  height="24"
-                  alt=""
-                />
-
-                <div>
-                  <p>
-                    {text.split(query).map((val, i) => (
-                      <>
-                        {i > 0 && <b>{query}</b>}
-                        <span>{val}</span>
-                      </>
-                    ))}
-                  </p>
-                  {desc && (
-                    <p class="text-sm text-gray-500">
-                      <small>{desc}</small>
-                    </p>
-                  )}
-                </div>
-              </li>
+              />
             ))}
           </ul>
 
@@ -130,6 +103,6 @@ export default function Search() {
           }
         </>
       )}
-    </>
+    </form>
   );
 }
