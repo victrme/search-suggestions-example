@@ -88,27 +88,34 @@ export default function Search() {
             role="listbox"
             class="my-4 p-1 w-full border-2 rounded-md"
           >
-            {list.map((item) => (
+            {list.map(({ text, desc, image }) => (
               <li
                 tabIndex={0}
                 role="option"
                 aria-label="search suggestions"
-                onClick={() => handleInput(item.text)}
+                onClick={() => handleInput(text)}
                 class="flex items-center gap-3 p-2 m-1 rounded leading-4 outline-none cursor-pointer hover:bg-blue-50 focus-visible:bg-blue-50"
               >
                 <img
                   class="object-contain"
-                  src={item.image ?? "search.svg"}
+                  src={image ?? "search.svg"}
                   width="24"
                   height="24"
                   alt=""
                 />
 
                 <div>
-                  <p>{item.text}</p>
-                  {item.desc && (
+                  <p>
+                    {text.split(query).map((val, i) => (
+                      <>
+                        {i > 0 && <b>{query}</b>}
+                        <span>{val}</span>
+                      </>
+                    ))}
+                  </p>
+                  {desc && (
                     <p class="text-sm text-gray-500">
-                      <small>{item.desc}</small>
+                      <small>{desc}</small>
                     </p>
                   )}
                 </div>
