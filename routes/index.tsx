@@ -1,5 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import Search from "../islands/Search.tsx";
+import Ads from "../islands/Ads.tsx";
 
 export default function Home() {
   return (
@@ -14,8 +15,8 @@ export default function Home() {
         />
       </Head>
 
-      <div class="container columns-3 h-screen pb-16 flex">
-        <div class="mx-auto max-w-lg w-full px-5">
+      <div class="columns-3 pb-16 gap-8 ">
+        <div class="px-5">
           <header class="w-full my-8 sm:my-16 sm:mt-20a text-left">
             <h1 class="text-2xl sm:text-3xl font-black leading-7 text-red-400 bg-red-50 rounded">
               Wow, free suggestions from multiple search engines !?
@@ -26,6 +27,8 @@ export default function Home() {
 
           <Search />
         </div>
+
+        <Ads />
       </div>
     </>
   );
