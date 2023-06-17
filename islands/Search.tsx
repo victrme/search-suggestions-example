@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 import Input from "../components/Input.tsx";
 import Providers from "../components/Providers.tsx";
 import ResultItem from "../components/ResultItem.tsx";
@@ -29,9 +29,10 @@ async function callAPI(
 
 export default function Search() {
   const [list, setList] = useState([] as Suggestions);
+  const [provider, setProvider] = useState("");
+  const [selected, setSelected] = useState(-1);
   const [latency, setLatency] = useState(-1);
   const [query, setQuery] = useState("");
-  const [provider, setProvider] = useState("");
 
   function handleInput(q: string) {
     setQuery(q);
@@ -47,6 +48,29 @@ export default function Search() {
     const [json, ms] = await callAPI(q, provider);
     setList(json);
     setLatency(ms);
+    setSelected(-1);
+  }
+
+  function handleResultsKeys(e: KeyboardEvent) {
+    const isArrowDown = e.code === "ArrowDown";
+    const isArrowUp = e.code === "ArrowUp";
+    const isEnter = e.code === "Enter";
+    const isReturn = e.code === "Escape";
+
+    if (isArrowDown || isArrowUp) {
+      setSelected((selected + (isArrowDown ? 1 : -1)) % list.length);
+      e.preventDefault();
+    }
+
+    if (isEnter) {
+      handleInput(list[selected].text);
+      e.preventDefault();
+    }
+
+    if (isReturn) {
+      setSelected(-1);
+      setList([]);
+    }
   }
 
   useEffect(() => setProvider(localStorage.provider ?? "google"), []);
@@ -55,6 +79,7 @@ export default function Search() {
   return (
     <form
       role="search"
+      onKeyDown={handleResultsKeys}
       onSubmit={(e) => e.preventDefault()}
     >
       <div class="flex flex-col gap-2 sm:flex-row-reverse">
@@ -87,15 +112,19 @@ export default function Search() {
             aria-label="search-results"
             class="my-4 p-1 w-full border-2 rounded-md outline-none"
           >
-            {list.map((item) => (
+            {list.map((item, i) => (
               <ResultItem
                 item={item}
                 query={query}
+                key={item.text + i}
                 role="option"
                 aria-atomic="true"
                 aria-label={item.text}
+                aria-selected={selected === i ? "true" : "false"}
                 onClick={() => handleInput(item.text)}
-                class="flex items-center gap-3 p-2 m-1 rounded leading-4 outline-none cursor-pointer hover:bg-blue-50"
+                onMouseEnter={() => setSelected(i)}
+                class={"flex items-center gap-3 p-2 m-1 rounded leading-4 outline-none cursor-pointer" +
+                  (selected === i ? " bg-blue-50" : "")}
               />
             ))}
           </ul>
