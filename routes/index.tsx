@@ -15,9 +15,9 @@ export default function Home() {
         />
       </Head>
 
-      <div class="columns-3 pb-16 gap-8 ">
-        <div class="px-5">
-          <header class="w-full my-8 sm:my-16 sm:mt-20a text-left">
+      <div class="flex p-4 md:p-8 md:py-16 gap-20 mx-auto max-w-screen-xl">
+        <div class="px-5 max-w-screen-sm mx-auto ">
+          <header class="w-full my-8 sm:my-16 sm:mt-20 text-left">
             <h1 class="text-2xl sm:text-3xl font-black leading-7 text-red-400 bg-red-50 rounded">
               Wow, free suggestions from multiple search engines !?
             </h1>
@@ -28,7 +28,7 @@ export default function Home() {
           <Search />
         </div>
 
-        <Ads />
+        <Ads class="hidden xl:flex flex-col gap-6 max-w-sm text-sm" />
       </div>
     </>
   );

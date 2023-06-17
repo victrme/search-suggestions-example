@@ -1,16 +1,36 @@
-export default function Ads() {
+import { JSX } from "preact/jsx-runtime";
+
+export default function Ads(props: JSX.HTMLAttributes<HTMLElement>) {
   return (
-    <aside class="text-sm">
-      <div class="bg-blue-100 h-36 w-full my-4 rounded-md overflow-hidden">
-        <span class=" text-5xl text-blue-300 font-black tracking-tighter break-all">
-          paid content start for free
+    <aside {...props}>
+      <div class="mb-8 py-8 bg-indigo-300 w-full rounded-md overflow-hidden">
+        <span class="text-4xl text-white text-opacity-50 font-black tracking-tighter break-all">
+          paid content start for free learn more get started now we detected
+          that you are using an ablocker
         </span>
       </div>
 
-      <div class="bg-indigo-100 h-48 w-full my-4 rounded-md overflow-hidden">
-        <span class=" text-5xl text-indigo-300 font-bold tracking-tighter break-all">
-          learn more get started now
-        </span>
+      <div class="flex flex-col items-center rounded-md p-3 bg-gray-50">
+        <h3 class="text-lg font-bold my-3">Sign-up to our newsletter 🚀</h3>
+        <p>
+          Get all the latest news and life coaching weekly
+          <span class="text-red-500">?</span>
+        </p>
+        <p>
+          No<span class="text-red-500">,</span> spam guarantee
+          <span class="text-red-500">!</span>
+        </p>
+        <div class="flex items-center">
+          <input
+            type="email"
+            name="fake-signup"
+            placeholder="subscribe with email"
+            class="w-2/3 px-3 py-2 m-3 rounded bg-white border(1 gray-200) ouline outline-2"
+          />
+          <button class="py-2 px-4 rounded bg-blue-600 text-white">
+            Subscribe
+          </button>
+        </div>
       </div>
 
       <div class="p-3 rounded bg-gray-50">
@@ -19,16 +39,16 @@ export default function Ads() {
           those cookies if you want.
         </p>
         <div class="flex gap-2 mt-3">
-          <button class="px-3 py-px  rounded bg-gray-200">
+          <button class="px-3 py-1  rounded bg-gray-200">
             Ask later
           </button>
-          <button class="px-2 rounded bg-green-500 text-white">
+          <button class="px-3 py-1 rounded bg-green-500 text-white">
             Accept all
           </button>
         </div>
       </div>
 
-      <div class="p-3 my-3 rounded bg-blue-50">
+      <div class="p-3 rounded bg-blue-50">
         <p>
           New podcast just dropped ! All about things you definitely care about
           🎉 😊
@@ -44,14 +64,14 @@ export default function Ads() {
 
       <div class="flex flex-col gap-2">
         <p>Share this page on:</p>
-        <div class="flex gap-2">
-          <button class="px-2 rounded bg-gray-100">
-            Social website
+        <div class="flex gap-2 mt-2">
+          <button class="w-8 h-8 font-bold rounded-full bg-blue-200">F</button>
+          <button class="w-8 h-8 font-bold rounded-full bg-red-100">Y</button>
+          <button class="w-8 h-8 font-bold rounded-full bg-blue-100">T</button>
+          <button class="w-8 h-8 font-bold rounded-full bg-green-200">S</button>
+          <button class="w-8 h-8 font-bold rounded-full bg-gray-500 text-white">
+            M
           </button>
-          <button class="px-2 rounded bg-gray-100">
-            Text message
-          </button>
-          <button class="px-2 rounded bg-gray-100">Fax</button>
         </div>
       </div>
     </aside>
