@@ -31,7 +31,7 @@ async function callAPI({ lang, query, provider }: APIProps): APIReturn {
 
 export default function Search() {
   const [list, setList] = useState([] as Suggestions);
-  const [provider, setProvider] = useState("");
+  const [provider, setProvider] = useState("google");
   const [selected, setSelected] = useState(-1);
   const [latency, setLatency] = useState(-1);
   const [query, setQuery] = useState("");
