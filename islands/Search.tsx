@@ -58,7 +58,8 @@ export default function Search() {
     const isReturn = e.code === "Escape";
 
     if (isArrowDown || isArrowUp) {
-      setSelected((selected + (isArrowDown ? 1 : -1)) % list.length);
+      const count = selected + (isArrowDown ? 1 : -1);
+      setSelected(Math.max(-1, count % list.length));
       e.preventDefault();
     }
 
