@@ -1,17 +1,17 @@
 import { JSX } from "preact/jsx-runtime";
 
+const providers = [
+  "google",
+  "bing",
+  "yahoo",
+  "qwant",
+  "duckduckgo",
+  "startpage",
+];
+
 export default function ProviderSelect(
   props: JSX.HTMLAttributes<HTMLSelectElement>,
 ) {
-  const providers = [
-    "google",
-    "bing",
-    "yahoo",
-    "qwant",
-    "duckduckgo",
-    "startpage",
-  ];
-
   return (
     <select {...props}>
       {providers.map((item) => (

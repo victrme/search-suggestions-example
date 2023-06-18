@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useState } from "preact/hooks";
 import Input from "../components/Input.tsx";
 import Providers from "../components/Providers.tsx";
 import ResultItem from "../components/ResultItem.tsx";
+import LangSelect from "../components/Langs.tsx";
 
 type Suggestions = {
   text: string;
@@ -9,11 +10,12 @@ type Suggestions = {
   image?: string;
 }[];
 
-async function callAPI(
-  query: string,
-  provider: string,
-): Promise<[Suggestions, number]> {
-  const url = `https://searchsuggestions.netlify.app/${provider}/en/${query}`;
+type APIProps = { lang: string; query: string; provider: string };
+type APIReturn = Promise<[Suggestions, number]>;
+
+async function callAPI({ lang, query, provider }: APIProps): APIReturn {
+  const base = "https://searchsuggestions.netlify.app";
+  const url = `${base}/${provider}/${lang}/${query}`;
   const perfstart = performance.now();
   const resp = await fetch(url);
 
@@ -33,6 +35,7 @@ export default function Search() {
   const [selected, setSelected] = useState(-1);
   const [latency, setLatency] = useState(-1);
   const [query, setQuery] = useState("");
+  const [lang, setLang] = useState("en");
 
   function handleInput(q: string) {
     setQuery(q);
@@ -44,8 +47,13 @@ export default function Search() {
     setProvider(val);
   }
 
+  function handleLang(e: Event) {
+    const val = (e.target as HTMLSelectElement).value;
+    setLang(val);
+  }
+
   async function handleList(q: string) {
-    const [json, ms] = await callAPI(q, provider);
+    const [json, ms] = await callAPI({ query: q, provider, lang });
     setList(json);
     setLatency(ms);
     setSelected(-1);
@@ -74,8 +82,19 @@ export default function Search() {
     }
   }
 
-  useEffect(() => setProvider(localStorage.provider ?? "google"), []);
-  useEffect(() => localStorage.setItem("provider", provider), [provider]);
+  useEffect(() => {
+    if (provider && lang) {
+      localStorage.setItem("lastchoice", JSON.stringify({ provider, lang }));
+    }
+  }, [provider, lang]);
+
+  useEffect(() => {
+    if (localStorage.lastchoice) {
+      const { provider, lang } = JSON.parse(localStorage.lastchoice);
+      setProvider(provider ?? "google");
+      setLang(lang ?? "en");
+    }
+  }, []);
 
   return (
     <form
@@ -84,12 +103,21 @@ export default function Search() {
       onSubmit={(e) => e.preventDefault()}
     >
       <div class="flex flex-col gap-2 sm:flex-row-reverse">
-        <Providers
-          name="providers"
-          value={provider}
-          onChange={handleProvider}
-          class="bg-transparent border(gray-500 2) rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
-        />
+        <div class="flex w-full gap-2">
+          <Providers
+            name="providers"
+            value={provider}
+            onChange={handleProvider}
+            class="bg-transparent border(gray-500 2) w-full rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
+          />
+
+          <LangSelect
+            name="lang"
+            value={lang}
+            onChange={handleLang}
+            class="bg-transparent border(gray-500 2) w-full rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
+          />
+        </div>
 
         <Input
           value={query}
