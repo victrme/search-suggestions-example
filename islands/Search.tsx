@@ -14,10 +14,14 @@ type APIProps = { lang: string; query: string; provider: string; auth: string };
 type APIReturn = Promise<[Suggestions, number]>;
 
 async function callAPI({ lang, query, provider, auth }: APIProps): APIReturn {
-  const base = "https://searchsuggestions.netlify.app";
-  const url = `${base}/${provider}/${lang}/${query}`;
+  const url = "https://searchsuggestions.netlify.app/";
   const perfstart = performance.now();
-  const resp = await fetch(url, { headers: { "Authorization": auth } });
+
+  const resp = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify({ provider, lang, query }),
+    headers: { "authorization": auth },
+  });
 
   if (resp.status === 404) {
     return [[], -1];
