@@ -10,15 +10,14 @@ type Suggestions = {
   image?: string;
 }[];
 
-type APIProps = { lang: string; query: string; provider: string };
+type APIProps = { lang: string; query: string; provider: string; auth: string };
 type APIReturn = Promise<[Suggestions, number]>;
 
-async function callAPI({ lang, query, provider }: APIProps): APIReturn {
+async function callAPI({ lang, query, provider, auth }: APIProps): APIReturn {
   const base = "https://searchsuggestions.netlify.app";
   const url = `${base}/${provider}/${lang}/${query}`;
   const perfstart = performance.now();
-  const AUTHKEY = Deno.env.get("AUTHKEY") ?? "";
-  const resp = await fetch(url, { headers: { "Authorization": AUTHKEY } });
+  const resp = await fetch(url, { headers: { "Authorization": auth } });
 
   if (resp.status === 404) {
     return [[], -1];
@@ -30,7 +29,7 @@ async function callAPI({ lang, query, provider }: APIProps): APIReturn {
   return [json, ms];
 }
 
-export default function Search() {
+export default function Search({ auth }: { auth: string }) {
   const [list, setList] = useState([] as Suggestions);
   const [provider, setProvider] = useState("google");
   const [selected, setSelected] = useState(-1);
@@ -54,7 +53,7 @@ export default function Search() {
   }
 
   async function handleList(q: string) {
-    const [json, ms] = await callAPI({ query: q, provider, lang });
+    const [json, ms] = await callAPI({ query: q, provider, lang, auth });
     setList(json);
     setLatency(ms);
     setSelected(-1);

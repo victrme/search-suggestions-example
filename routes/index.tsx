@@ -3,6 +3,8 @@ import Search from "../islands/Search.tsx";
 import Ads from "../islands/Ads.tsx";
 
 export default function Home() {
+  const AUTHKEY = Deno.env.get("AUTHKEY") ?? "";
+
   return (
     <>
       <Head>
@@ -25,7 +27,7 @@ export default function Home() {
             <HeaderLinks />
           </header>
 
-          <Search />
+          <Search auth={AUTHKEY} />
         </div>
 
         <Ads class="hidden xl:flex flex-col gap-6 max-w-sm text-sm" />
