@@ -17,7 +17,8 @@ async function callAPI({ lang, query, provider }: APIProps): APIReturn {
   const base = "https://searchsuggestions.netlify.app";
   const url = `${base}/${provider}/${lang}/${query}`;
   const perfstart = performance.now();
-  const resp = await fetch(url);
+  const AUTHKEY = Deno.env.get("AUTHKEY") ?? "";
+  const resp = await fetch(url, { headers: { "Authorization": AUTHKEY } });
 
   if (resp.status === 404) {
     return [[], -1];
