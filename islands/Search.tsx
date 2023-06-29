@@ -10,18 +10,15 @@ type Suggestions = {
   image?: string;
 }[];
 
-type APIProps = { lang: string; query: string; provider: string; auth: string };
+type APIProps = { lang: string; query: string; provider: string };
 type APIReturn = Promise<[Suggestions, number]>;
 
-async function callAPI({ lang, query, provider, auth }: APIProps): APIReturn {
-  const url = "https://searchsuggestions.netlify.app/";
+async function callAPI({ lang, query, provider }: APIProps): APIReturn {
+  const base = "https://search-suggestions.victr.workers.dev/";
+  const url = base + `${provider}/${lang}/${query}`;
   const perfstart = performance.now();
 
-  const resp = await fetch(url, {
-    method: "POST",
-    body: JSON.stringify({ provider, lang, query }),
-    headers: { "authorization": auth },
-  });
+  const resp = await fetch(url, { method: "POST" });
 
   if (resp.status === 404) {
     return [[], -1];
@@ -33,7 +30,7 @@ async function callAPI({ lang, query, provider, auth }: APIProps): APIReturn {
   return [json, ms];
 }
 
-export default function Search({ auth }: { auth: string }) {
+export default function Search() {
   const [list, setList] = useState([] as Suggestions);
   const [provider, setProvider] = useState("google");
   const [selected, setSelected] = useState(-1);
@@ -57,7 +54,7 @@ export default function Search({ auth }: { auth: string }) {
   }
 
   async function handleList(q: string) {
-    const [json, ms] = await callAPI({ query: q, provider, lang, auth });
+    const [json, ms] = await callAPI({ query: q, provider, lang });
     setList(json);
     setLatency(ms);
     setSelected(-1);
