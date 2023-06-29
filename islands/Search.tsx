@@ -15,10 +15,10 @@ type APIReturn = Promise<[Suggestions, number]>;
 
 async function callAPI({ lang, query, provider }: APIProps): APIReturn {
   const base = "https://search-suggestions.victr.workers.dev/";
-  const url = base + `${provider}/${lang}/${query}`;
+  const url = base + `?q=${query}&l=${lang}&with=${provider}`;
   const perfstart = performance.now();
 
-  const resp = await fetch(url, { method: "POST" });
+  const resp = await fetch(url);
 
   if (resp.status === 404) {
     return [[], -1];
