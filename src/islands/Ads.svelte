@@ -21,7 +21,7 @@
 				type="email"
 				name="fake-signup"
 				placeholder="subscribe with email"
-				class="w-2/3 px-3 py-2 m-3 rounded bg-white border(1 gray-200) ouline outline-2"
+				class="w-2/3 px-3 py-2 m-3 rounded bg-white border border-gray-200 ouline outline-2"
 			/>
 			<button class="py-2 px-4 rounded bg-blue-600 text-white"> Subscribe </button>
 		</div>

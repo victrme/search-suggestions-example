@@ -1,17 +1,5 @@
-<!-- type Item = {
-  text: string;
-  desc?: string;
-  image?: string;
-};
-
-type Props = {
-  item: Item;
-  query: string;
-  [key: string]: unknown;
-}; -->
-
 <script>
-	const { index, selected, query, text, image, desc, attr } = $props;
+	const { index, selected, query, text, image, desc, attr } = $props();
 	const ariaSelected = $derived(selected === index ? 'true' : 'false');
 	const bgSelected = $derived(selected === index ? ' bg-blue-50' : '');
 </script>
@@ -29,10 +17,7 @@ type Props = {
 	<div>
 		<p>
 			{#each text.split(query) as val, i}
-				{#if i > 0}
-					<b>{query}</b>
-				{/if}
-				<span>{val}</span>
+				{#if i > 0}<b>{query}</b>{/if}<span>{val}</span>
 			{/each}
 		</p>
 		{#if desc}

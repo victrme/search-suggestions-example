@@ -4,30 +4,6 @@
 	import Langs from '../components/Langs.svelte';
 	import Input from '../components/Input.svelte';
 
-	/**
-	 * @typedef {Object} Suggestion
-	 * @property {string} text - The text of the suggestion.
-	 * @property {string} [desc] - The description of the suggestion (optional).
-	 * @property {string} [image] - The URL of the image associated with the suggestion (optional).
-	 */
-
-	/**
-	 * @typedef {Array<Suggestion>} Suggestions
-	 * An array of suggestion objects.
-	 */
-
-	/**
-	 * @typedef {Object} APIProps
-	 * @property {string} lang - The language for the query.
-	 * @property {string} query - The query string.
-	 * @property {string} provider - The provider for the query.
-	 */
-
-	/**
-	 * @typedef {[Suggestions, number]} APIReturn
-	 * A Promise that resolves to an array containing Suggestions and a number.
-	 */
-
 	let list = $state([]);
 	let provider = $state('google');
 	let selected = $state(-1);
@@ -35,8 +11,9 @@
 	let query = $state('');
 	let lang = $state('en');
 
-	$inspect(provider);
-	$inspect(lang);
+	// $inspect(provider);
+	// $inspect(lang);
+	// $inspect(list);
 
 	$effect(() => {
 		if (provider && lang) {
@@ -52,16 +29,9 @@
 		}
 	});
 
-	async function handleList(q) {
-		const [json, ms] = await callAPI({ query: q, provider, lang });
-		list = json;
-		latency = ms;
-		selected = -1;
-	}
-
 	function handleInput(value) {
 		query = value;
-		handleList(value);
+		callAPI({ query, provider, lang });
 	}
 
 	function handleProvider(event) {
@@ -72,11 +42,6 @@
 		lang = event.target.value;
 	}
 
-	/**
-	 * Calls the API with the provided parameters.
-	 * @param {APIProps} params - The parameters for the API call.
-	 * @returns {Promise<APIReturn>} A Promise that resolves to the API return value.
-	 */
 	async function callAPI({ lang, query, provider }) {
 		const base = 'https://suggestions.victr.me/';
 		const url = base + `?q=${query}&l=${lang}&with=${provider}`;
@@ -91,7 +56,9 @@
 		const json = await resp.json();
 		const ms = Math.round(performance.now() - perfstart);
 
-		return [json, ms];
+		list = json;
+		latency = ms;
+		selected = -1;
 	}
 
 	/**
@@ -122,19 +89,19 @@
 	}
 </script>
 
-<!-- on:keydown={handleResultsKeys} -->
+<svelte:document onkeydown={handleResultsKeys} />
 
 <form role="search" onsubmit={(e) => e.preventDefault()}>
 	<div class="flex flex-col gap-2 sm:flex-row-reverse">
 		<div class="flex w-full gap-2">
 			<Providers
 				onchange={handleProvider}
-				class="bg-transparent border(gray-500 2) w-full rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
+				class="bg-transparent border-2 border-gray-500 w-full rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
 			/>
 
 			<Langs
 				onchange={handleLang}
-				class="bg-transparent border(gray-500 2) w-full rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
+				class="bg-transparent border-2 border-gray-500 w-full rounded-md px-3 py-2 focus:border-red-400 focus:outline-none"
 			/>
 		</div>
 
@@ -146,7 +113,6 @@
 			autoComplete="off"
 			aria-controls="search-results"
 			placeholder="Search something"
-			class="w-full rounded-md outline-none focus:border-red-400"
 			oninput={(event) => handleInput(event.target.value)}
 		/>
 	</div>
@@ -161,18 +127,19 @@
 		>
 			{#each list as item, index}
 				<ResultItem
-					{item}
 					{query}
 					{index}
 					{selected}
+					text={item.text}
+					desc={item.desc}
+					image={item.image}
 					onclick={() => handleInput(item.text)}
 					onmouseenter={() => (selected = index)}
 				/>
-
-				<p class="w-full text-center leading-3 text-gray-400 mb-4">
-					<small>{latency}ms</small>
-				</p>
 			{/each}
+			<p class="w-full text-center leading-3 text-gray-400 mb-4">
+				<small>{latency}ms</small>
+			</p>
 		</ul>
 	{/if}
 </form>
