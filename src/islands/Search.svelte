@@ -43,7 +43,7 @@
 	}
 
 	async function callAPI({ lang, query, provider }) {
-		const base = 'https://suggestions.victr.me/';
+		const base = 'https://api.suggestions.victr.me/';
 		const url = base + `?q=${query}&l=${lang}&with=${provider}`;
 		const perfstart = performance.now();
 
