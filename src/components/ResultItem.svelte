@@ -1,7 +1,7 @@
 <script>
-	const { index, selected, query, text, image, desc, attr } = $props();
-	const ariaSelected = $derived(selected === index ? 'true' : 'false');
-	const bgSelected = $derived(selected === index ? ' bg-blue-50' : '');
+	const { index, selected, query, text, image, desc, attr } = $props()
+	const ariaSelected = $derived(selected === index ? 'true' : 'false')
+	const bgSelected = $derived(selected === index ? ' bg-blue-50' : '')
 </script>
 
 <li

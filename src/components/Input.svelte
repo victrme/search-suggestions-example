@@ -1,5 +1,5 @@
 <script>
-	const { ...attr } = $props();
+	const { ...attr } = $props()
 </script>
 
 <input

@@ -1,8 +1,7 @@
 <aside class="hidden lg:flex flex-col gap-6 max-w-sm text-sm">
 	<div class="mb-8 py-8 bg-indigo-300 w-full rounded-md overflow-hidden">
 		<span class="text-4xl text-white text-opacity-50 font-black tracking-tighter break-all">
-			paid content start for free learn more get started now we detected that you are using an
-			ablocker
+			paid content start for free learn more get started now we detected that you are using an ablocker
 		</span>
 	</div>
 
@@ -28,9 +27,7 @@
 	</div>
 
 	<div class="p-3 rounded bg-gray-50">
-		<p>
-			We use cookies for non ethical purposes. You can always opt-out of those cookies if you want.
-		</p>
+		<p>We use cookies for non ethical purposes. You can always opt-out of those cookies if you want.</p>
 		<div class="flex gap-2 mt-3">
 			<button class="px-3 py-1 rounded bg-gray-200"> Ask later </button>
 			<button class="px-3 py-1 rounded bg-green-500 text-white"> Accept all </button>
@@ -41,9 +38,7 @@
 		<p>New podcast just dropped ! All about things you definitely care about 🎉 😊</p>
 		<p>
 			Be sure to check it out on{' '}
-			<span class="underline text-blue-400 cursor-pointer">
-				every single platform possible
-			</span>{' '}
+			<span class="underline text-blue-400 cursor-pointer"> every single platform possible </span>{' '}
 			🤯
 		</p>
 	</div>

@@ -1,6 +1,6 @@
 <script>
-	const providers = ['google', 'bing', 'yahoo', 'qwant', 'duckduckgo', 'startpage'];
-	const { ...attr } = $props();
+	const providers = ['google', 'bing', 'yahoo', 'qwant', 'duckduckgo', 'startpage']
+	const { ...attr } = $props()
 </script>
 
 <select name="provider" {...attr}>

@@ -1,15 +1,15 @@
 <script>
-	import ResultItem from '../components/ResultItem.svelte';
-	import Providers from '../components/Providers.svelte';
-	import Langs from '../components/Langs.svelte';
-	import Input from '../components/Input.svelte';
+	import ResultItem from '../components/ResultItem.svelte'
+	import Providers from '../components/Providers.svelte'
+	import Langs from '../components/Langs.svelte'
+	import Input from '../components/Input.svelte'
 
-	let list = $state([]);
-	let provider = $state('google');
-	let selected = $state(-1);
-	let latency = $state(-1);
-	let query = $state('');
-	let lang = $state('en');
+	let list = $state([])
+	let provider = $state('google')
+	let selected = $state(-1)
+	let latency = $state(-1)
+	let query = $state('')
+	let lang = $state('en')
 
 	// $inspect(provider);
 	// $inspect(lang);
@@ -17,48 +17,48 @@
 
 	$effect(() => {
 		if (provider && lang) {
-			localStorage.setItem('lastchoice', JSON.stringify({ provider, lang }));
+			localStorage.setItem('lastchoice', JSON.stringify({ provider, lang }))
 		}
-	});
+	})
 
 	$effect(() => {
 		if (localStorage.lastchoice) {
-			const lastchoice = JSON.parse(localStorage.lastchoice);
-			provider = lastchoice.provider ?? 'google';
-			lang = lastchoice.lang ?? 'en';
+			const lastchoice = JSON.parse(localStorage.lastchoice)
+			provider = lastchoice.provider ?? 'google'
+			lang = lastchoice.lang ?? 'en'
 		}
-	});
+	})
 
 	function handleInput(value) {
-		query = value;
-		callAPI({ query, provider, lang });
+		query = value
+		callAPI({ query, provider, lang })
 	}
 
 	function handleProvider(event) {
-		provider = event.target.value;
+		provider = event.target.value
 	}
 
 	function handleLang(event) {
-		lang = event.target.value;
+		lang = event.target.value
 	}
 
 	async function callAPI({ lang, query, provider }) {
-		const base = 'https://api.suggestions.victr.me/';
-		const url = base + `?q=${query}&l=${lang}&with=${provider}`;
-		const perfstart = performance.now();
+		const base = 'https://api.suggestions.victr.me/'
+		const url = base + `?q=${query}&l=${lang}&with=${provider}`
+		const perfstart = performance.now()
 
-		const resp = await fetch(url);
+		const resp = await fetch(url)
 
 		if (resp.status === 404) {
-			return [[], -1];
+			return [[], -1]
 		}
 
-		const json = await resp.json();
-		const ms = Math.round(performance.now() - perfstart);
+		const json = await resp.json()
+		const ms = Math.round(performance.now() - perfstart)
 
-		list = json;
-		latency = ms;
-		selected = -1;
+		list = json
+		latency = ms
+		selected = -1
 	}
 
 	/**
@@ -66,25 +66,25 @@
 	 * @param {KeyboardEvent} event
 	 */
 	function handleResultsKeys(event) {
-		const isArrowDown = event.code === 'ArrowDown';
-		const isArrowUp = event.code === 'ArrowUp';
-		const isEnter = event.code === 'Enter';
-		const isReturn = event.code === 'Escape';
+		const isArrowDown = event.code === 'ArrowDown'
+		const isArrowUp = event.code === 'ArrowUp'
+		const isEnter = event.code === 'Enter'
+		const isReturn = event.code === 'Escape'
 
 		if (isArrowDown || isArrowUp) {
-			const count = selected + (isArrowDown ? 1 : -1);
-			selected = Math.max(-1, count % list.length);
-			event.preventDefault();
+			const count = selected + (isArrowDown ? 1 : -1)
+			selected = Math.max(-1, count % list.length)
+			event.preventDefault()
 		}
 
 		if (isEnter) {
-			handleInput(list[selected].text);
-			event.preventDefault();
+			handleInput(list[selected].text)
+			event.preventDefault()
 		}
 
 		if (isReturn) {
-			selected = -1;
-			list = [];
+			selected = -1
+			list = []
 		}
 	}
 </script>

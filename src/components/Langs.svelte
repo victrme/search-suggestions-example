@@ -17,10 +17,10 @@
 		da: 'Dansk',
 		fi: 'Suomi',
 		hu: 'Magyar',
-		gr: 'Ελληνικά'
-	};
+		gr: 'Ελληνικά',
+	}
 
-	const { ...attr } = $props();
+	const { ...attr } = $props()
 </script>
 
 <select name="lang" {...attr} bind:value={attr.lang}>
