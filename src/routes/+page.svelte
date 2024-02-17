@@ -1,7 +1,7 @@
 <script>
 	import Search from '../islands/Search.svelte'
 	import Ads from '../islands/Ads.svelte'
-	import '../app.css'
+	import '../_app.css'
 </script>
 
 <div class="flex p-4 md:p-8 md:py-16 gap-20 mx-auto max-w-screen-xl">
