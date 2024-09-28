@@ -1,5 +1,5 @@
 <script>
-	const providers = ['google', 'bing', 'yahoo', 'qwant', 'duckduckgo', 'startpage']
+	const providers = ['google', 'bing', 'yahoo', 'qwant', 'duckduckgo', 'brave']
 	const { ...attr } = $props()
 </script>
 
