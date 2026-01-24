@@ -1,22 +1,20 @@
 {
 	"name": "search-suggestions-example",
-	"version": "2.1.0",
-	"private": true,
 	"type": "module",
 	"scripts": {
-		"css": "tailwindcss -i ./src/app.css -o ./src/_app.css",
-		"css:watch": "tailwindcss -i ./src/app.css -o ./src/_app.css --watch",
-		"dev": "npx concurrently 'npm run css:watch' 'vite dev'",
-		"build": "npm run css && vite build",
+		"dev": "vite dev",
+		"build": "vite build",
 		"preview": "vite preview"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-cloudflare": "^4.7.2",
-		"@sveltejs/kit": "^2.6.1",
-		"@sveltejs/vite-plugin-svelte": "^4.0.0-next.6",
-		"svelte": "5.0.0-next.260",
-		"tailwindcss": "^3.4.13",
-		"vite": "^5.4.8"
+		"@sveltejs/adapter-cloudflare": "^7.2.6",
+		"@sveltejs/kit": "^2.50.1",
+		"@sveltejs/vite-plugin-svelte": "^6.2.4",
+		"@tailwindcss/vite": "^4.1.18",
+		"svelte": "5.48.1",
+		"tailwindcss": "^4.1.18",
+		"vite": "^7.3.1",
+		"wrangler": "^4.60.0"
 	},
 	"prettier": {
 		"semi": false,
