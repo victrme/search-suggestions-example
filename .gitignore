@@ -11,3 +11,5 @@
 
 node_modules
 _app.css
+
+pnpm-lock.yaml
